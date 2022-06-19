@@ -1,0 +1,27 @@
+#contenedor-user-info{ 
+
+    cursor: pointer;
+
+}
+
+/* ------------------------------- */
+
+#contendor-opciones-sesion{
+    display: flex;
+    
+    color: snow;
+}
+
+#contendor-opciones-sesion a{
+
+    
+    margin-left: 15px;
+
+    text-decoration: none;
+    color: inherit;
+
+}
+
+#link-login{
+    color: #06d6a0;
+}

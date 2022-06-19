@@ -1,0 +1,28 @@
+#contenedor-inicio{
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: space-around;
+}
+
+#contenedor-carousel{
+    width: 75vw;
+}
+
+#contenedor-mejores-puntuados{
+    width: 75vw;
+    height: 300px;
+
+    border: 1px solid black;
+}
+
+#contenedor-super-oferta{
+    width: 75vw;
+    height: 300px;
+
+    border: 1px solid black;
+}
+

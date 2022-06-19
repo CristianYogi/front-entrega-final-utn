@@ -1,0 +1,90 @@
+main{
+    position: inherit;
+
+    margin-top: 25px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/*---------------BUSCADOR--------------- */
+#buscador-contenedor{
+    width: 15vw;
+    
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: space-evenly;
+
+    position: fixed;
+    left: 30px;
+    padding: 10px;
+
+    background-color: snow;
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+#range-input-container{
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-evenly;
+}
+
+.range-input{
+    width: 50px;
+    text-align: center;
+}
+
+.range-text-input{
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.opciones-container{
+    min-width: 75%;
+
+    margin-top: 50px;
+
+    text-align: center;
+    border-top: 1px solid black;
+
+}
+
+.categorias-lista{
+    list-style: none;
+    padding: 0;
+}
+
+.categorias-lista li {
+    margin-top: 3px;
+    font-weight: bold;
+}
+/*---------------PRODUCTOS--------------- */
+
+#productos-contenedor{
+
+    width: 80vw;
+    height: 90vh;
+
+    position: absolute;
+    right: 15px;
+
+    background-color: snow;
+}
+
+
+
+
+

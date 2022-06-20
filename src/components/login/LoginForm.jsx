@@ -6,7 +6,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import KeyIcon from '@mui/icons-material/Key';
-
+import sesionContext from "../../context/sesionContex";
+import { useContext } from "react";
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -24,6 +25,8 @@ const MyInput = ({ field, form, ...props }) => {
 
 
 const RegisterForm = () =>{
+    const {userSesion,setUserSesion} = useContext(sesionContext)
+
     return(
     <Formik 
     initialValues={{userName: "", password: ""}} 
@@ -55,7 +58,7 @@ const RegisterForm = () =>{
         .then(json => {
             console.log(json)
             document.cookie = `access_token=${json.Token_Info.token}`
-            
+            setUserSesion({userName: json.Token_Info.user.name, img: ''})
         })
         
         setSubmitting(false)

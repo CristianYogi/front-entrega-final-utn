@@ -155,7 +155,9 @@ const RegisterForm = () =>{
                         >
 
                         </Field>
-                    <input type='file' name='photo' accept='image/*' />
+                    <input type='file' name='file'onChange={(event) => {
+                        setFieldValue("file", event.target.files[0])
+                    }} accept='image/*' />
                 </div>
                 <Button type="submit" variant="contained">Registrarse</Button>
             </Form>

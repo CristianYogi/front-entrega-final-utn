@@ -10,11 +10,13 @@ const MyInput = ({ field, form, ...props }) => {
 
   };
 
+
+
 const RegisterForm = () =>{
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     return(
     <Formik 
-    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: ""}} 
+    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: "", file: ""}} 
     validationSchema= {yup.object({
     nombre: yup.string()
         .required("Required")
@@ -49,27 +51,35 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
-        const data = {
-            nombre : values.nombre,
-            apellido : values.apellido,
-            email : values.email,
-            userName: values.userName,
-            password: values.password
-        }
+        // const data = {
+        //     nombre : values.nombre,
+        //     apellido : values.apellido,
+        //     email : values.email,
+        //     userName: values.userName,
+        //     password: values.password
+        // }
+        let dataSend = new FormData()
+
+        dataSend.append('file', values.file)
+        dataSend.append('apellido', values.apellido)
+        dataSend.append('email', values.email)
+        dataSend.append('userName', values.userName)
+        dataSend.append('password', values.password)
+
+        
         fetch("https://apideploy-final.herokuapp.com/users/register", {
             method: "POST",
             headers: {
                 "Accept" : "application/json",
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: dataSend
         })
         .then((res) => console.log(res))
         .catch(err => console.log(err))
         setSubmitting(false)
     }}
     >
-{  (yupData) =>      
+{  ({setFieldValue}) =>      
             <Form id="formulario-registrarse">
                     <div id="contenedor-nombre-apellido" className="contenedor-input">
                         <Field
@@ -151,6 +161,11 @@ const RegisterForm = () =>{
                         >
                         </Field>
                 </div>
+
+                <input type="file" name="file" id="foto"  onChange={(event) => 
+                    setFieldValue("file",event.target.files[0])
+                }/>
+
                 <Button type="submit" variant="contained">Registrarse</Button>
             </Form>
 }

@@ -14,7 +14,7 @@ const MyInput = ({ field, form, ...props }) => {
     return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
         
-        {field.name === 'username' ? <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> : <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>}
+        {field.name === 'userName' ? <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> : <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>}
 
         <TextField {...field} {...props}  helperText={form.touched[field.name] && form.errors[field.name]} error={form.touched[field.name] && form.errors[field.name] && true} />
     </Box>
@@ -26,9 +26,9 @@ const MyInput = ({ field, form, ...props }) => {
 const RegisterForm = () =>{
     return(
     <Formik 
-    initialValues={{username: "", password: ""}} 
+    initialValues={{userName: "", password: ""}} 
     validationSchema= {yup.object({
-    username: yup.string()
+    userName: yup.string()
         .min(2, 'Min 2 Char')
         .max(15, 'Max 15 Char')
         .required("Required"),
@@ -39,15 +39,33 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
-        alert(JSON.stringify(values, null, 2))
+        const data = {
+            userName: values.userName,
+            password: values.password
+        }
+        fetch("https://apideploy-final.herokuapp.com/users/login",{
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log(json)
+            document.cookie = `access_token=${json.Token_Info.token}`
+            
+        })
+        
         setSubmitting(false)
     }}
     >
-{  (yupData) =>      
+{  () =>      
             <Form id="formulario-registrarse">
                     <div id="contenedor-username-login" className="contenedor-input">
                         <Field
-                            name="username"
+                            name="userName"
                             component={MyInput}
                             tpye="text"
                             id="outlined-basic"

@@ -4,20 +4,17 @@ import TextField from '@mui/material/TextField';
 import * as yup from "yup"
 import Button from '@mui/material/Button';
 
-
 const MyInput = ({ field, form, ...props }) => {
     
     return <TextField {...field} {...props}  helperText={form.touched[field.name] && form.errors[field.name]} error={form.touched[field.name] && form.errors[field.name] && true}></TextField> 
 
   };
 
-
 const RegisterForm = () =>{
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-
     return(
     <Formik 
-    initialValues={{nombre:"", apellido:"", username: "", email: "", password: "", password2: "", phoneNumber: ""}} 
+    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: ""}} 
     validationSchema= {yup.object({
     nombre: yup.string()
         .required("Required")
@@ -25,20 +22,20 @@ const RegisterForm = () =>{
     apellido: yup.string()
         .required("Required")
         .max(20, 'Max 20 Char'),
-    username: yup.string()
+    userName: yup.string()
         .min(2, 'Min 2 Char')
-        .max(15, 'Max 15 Char')
+        .max(15, 'Max 20 Char')
         .required("Required"),
     email: yup.string()
         .email("Must be an Email")
         .required("Required"),
     password: yup.string()
-        .min(2, 'Min 2 Char')
-        .max(15, 'Max 15 Char')
+        .min(8, 'Min 8 Char')
+        .max(20, 'Max 20 Char')
         .required("Required"),
     password2: yup.string()
-        .min(2, 'Min 2 Char')
-        .max(15, 'Max 15 Char')
+        .min(8, 'Min 8 Char')
+        .max(20, 'Max 20 Char')
         .required("Required")
         .test("verfySamePass", "Ambas Contraseñas deben ser iguales",(value, ctx) => {
             
@@ -52,7 +49,23 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
-        alert(JSON.stringify(values, null, 2))
+        const data = {
+            nombre : values.nombre,
+            apellido : values.apellido,
+            email : values.email,
+            userName: values.userName,
+            password: values.password
+        }
+        fetch("https://apideploy-final.herokuapp.com/users/register", {
+            method: "POST",
+            headers: {
+                "Accept" : "application/json",
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((res) => console.log(res))
+        .catch(err => console.log(err))
         setSubmitting(false)
     }}
     >
@@ -78,7 +91,7 @@ const RegisterForm = () =>{
                     </div>
                     <div id="contenedor-username-mail" className="contenedor-input">
                         <Field
-                            name="username"
+                            name="userName"
                             component={MyInput}
                             tpye="text"
                             id="outlined-basic"

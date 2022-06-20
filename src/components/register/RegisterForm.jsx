@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import TextField from '@mui/material/TextField';
 import * as yup from "yup"
 import Button from '@mui/material/Button';
+import { useRef } from "react";
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -12,9 +13,10 @@ const MyInput = ({ field, form, ...props }) => {
 
 const RegisterForm = () =>{
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
     return(
     <Formik 
-    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: ""}} 
+    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: "", file: ""}} 
     validationSchema= {yup.object({
     nombre: yup.string()
         .required("Required")
@@ -49,6 +51,7 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
+        console.log(values)
         const data = {
             nombre : values.nombre,
             apellido : values.apellido,
@@ -56,6 +59,7 @@ const RegisterForm = () =>{
             userName: values.userName,
             password: values.password
         }
+        
         fetch("https://apideploy-final.herokuapp.com/users/register", {
             method: "POST",
             headers: {
@@ -69,8 +73,8 @@ const RegisterForm = () =>{
         setSubmitting(false)
     }}
     >
-{  (yupData) =>      
-            <Form id="formulario-registrarse">
+{  ({values, setFieldValue}) =>      
+            <Form id="formulario-registrarse" encType="multipart/form-data">
                     <div id="contenedor-nombre-apellido" className="contenedor-input">
                         <Field
                             name="nombre"
@@ -149,7 +153,9 @@ const RegisterForm = () =>{
                             type="text"
                             autoComplete="numero-telefono"
                         >
+
                         </Field>
+                    <input type='file' name='photo' accept='image/*' />
                 </div>
                 <Button type="submit" variant="contained">Registrarse</Button>
             </Form>

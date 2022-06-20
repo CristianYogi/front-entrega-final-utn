@@ -57,8 +57,8 @@ const RegisterForm = () =>{
             apellido : values.apellido,
             email : values.email,
             userName: values.userName,
-            password: values.password,
-            file: values.file
+            password: values.password
+            
         }
         
         fetch("https://apideploy-final.herokuapp.com/users/register", {
@@ -67,7 +67,8 @@ const RegisterForm = () =>{
                 "Accept" : "application/json",
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            file: values.file
         })
         .then((res) => console.log(res))
         .catch(err => console.log(err))

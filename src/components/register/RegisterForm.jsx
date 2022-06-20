@@ -61,26 +61,25 @@ const RegisterForm = () =>{
         let dataSend = new FormData()
 
         dataSend.append('file', values.file)
+        dataSend.append('nombre', values.nombre)
         dataSend.append('apellido', values.apellido)
         dataSend.append('email', values.email)
         dataSend.append('userName', values.userName)
         dataSend.append('password', values.password)
-
+        
         
         fetch("https://apideploy-final.herokuapp.com/users/register", {
-            method: "POST",
-            headers: {
-                "Accept" : "application/json",
-            },
+            method: "post",
+            headers: new Headers({Accept: 'application/json'}),
             body: dataSend
         })
-        .then((res) => console.log(res))
-        .catch(err => console.log(err))
+        .then((res) => console.log("a",res))
+        .catch(err => console.log("asd",err))
         setSubmitting(false)
     }}
     >
 {  ({setFieldValue}) =>      
-            <Form id="formulario-registrarse">
+            <Form id="formulario-registrarse" encType="multipart/form-data">
                     <div id="contenedor-nombre-apellido" className="contenedor-input">
                         <Field
                             name="nombre"

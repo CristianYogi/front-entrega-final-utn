@@ -3,7 +3,6 @@ import { Formik, Form, Field } from 'formik'
 import TextField from '@mui/material/TextField';
 import * as yup from "yup"
 import Button from '@mui/material/Button';
-import { useRef } from "react";
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -13,10 +12,9 @@ const MyInput = ({ field, form, ...props }) => {
 
 const RegisterForm = () =>{
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-
     return(
     <Formik 
-    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: "", file: ""}} 
+    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: ""}} 
     validationSchema= {yup.object({
     nombre: yup.string()
         .required("Required")
@@ -51,32 +49,28 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
-        console.log(values)
         const data = {
             nombre : values.nombre,
             apellido : values.apellido,
             email : values.email,
             userName: values.userName,
             password: values.password
-            
         }
-        
         fetch("https://apideploy-final.herokuapp.com/users/register", {
             method: "POST",
             headers: {
                 "Accept" : "application/json",
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
-            file: values.file
+            body: JSON.stringify(data)
         })
         .then((res) => console.log(res))
         .catch(err => console.log(err))
         setSubmitting(false)
     }}
     >
-{  ({values, setFieldValue}) =>      
-            <Form id="formulario-registrarse" encType="multipart/form-data">
+{  (yupData) =>      
+            <Form id="formulario-registrarse">
                     <div id="contenedor-nombre-apellido" className="contenedor-input">
                         <Field
                             name="nombre"
@@ -155,11 +149,7 @@ const RegisterForm = () =>{
                             type="text"
                             autoComplete="numero-telefono"
                         >
-
                         </Field>
-                    <input type='file' name='file'onChange={(event) => {
-                        setFieldValue("file", event.target.files[0])
-                    }} accept='image/*' />
                 </div>
                 <Button type="submit" variant="contained">Registrarse</Button>
             </Form>

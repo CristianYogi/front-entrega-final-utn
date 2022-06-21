@@ -12,9 +12,9 @@ function App() {
     const data = JSON.parse(localStorage.getItem('sesionData'))
 
     if(data != null){
-      setUserSesion({userName: data.name})
+      setUserSesion({userName: data.name, img:data.img})
     }else{
-      setUserSesion({userName: ''})
+      setUserSesion({userName: '', img: ''})
     }
   }, [])
 

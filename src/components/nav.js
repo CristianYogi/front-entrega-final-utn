@@ -96,7 +96,7 @@ const ResponsiveAppBar = ({userSesion}) => {
             
         <Tooltip title="Open settings">
           <IconButton  sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            <Avatar alt="Remy Sharp" src={!userSesion.img ? "/static/images/avatar/2.jpg" : userSesion.img} />
           </IconButton>
         </Tooltip>
         <Typography style={{marginLeft: '10px'}}>{userSesion.userName}</Typography>

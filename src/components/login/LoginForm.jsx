@@ -59,7 +59,7 @@ const RegisterForm = () =>{
             console.log(json)
             document.cookie = `access_token=${json.Token_Info.token}`
             localStorage.setItem("sesionData", JSON.stringify(json.Token_Info.user))
-            setUserSesion({userName: json.Token_Info.user.name, img: ''})
+            setUserSesion({userName: json.Token_Info.user.name, img: json.Token_Info.user.img})
         })
         
         setSubmitting(false)

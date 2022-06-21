@@ -58,6 +58,7 @@ const RegisterForm = () =>{
         .then(json => {
             console.log(json)
             document.cookie = `access_token=${json.Token_Info.token}`
+            localStorage.setItem("sesionData", JSON.stringify(json.Token_Info.user))
             setUserSesion({userName: json.Token_Info.user.name, img: ''})
         })
         

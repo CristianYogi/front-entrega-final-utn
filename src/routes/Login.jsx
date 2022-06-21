@@ -6,6 +6,7 @@ const Login = () => {
         <div id='contenedor-formulario' className='contenedor-principal'>
             <h1>Login</h1>
             <LoginForm></LoginForm>
+            <img src='https://i.imgur.com/C657SU2.jpeg'></img>
         </div>
     )
 }

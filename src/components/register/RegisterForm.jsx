@@ -49,6 +49,9 @@ const RegisterForm = () =>{
 
     })} 
     onSubmit = {(values, {setSubmitting}) => {
+        const formData = new FormData()
+        formData.append('image', values.file);
+        
         const data = {
             nombre : values.nombre,
             apellido : values.apellido,
@@ -56,21 +59,42 @@ const RegisterForm = () =>{
             userName: values.userName,
             password: values.password
         }
-        fetch("https://apideploy-final.herokuapp.com/users/register", {
+
+        fetch("https://api.imgur.com/3/image", {
             method: "POST",
             headers: {
-                "Accept" : "application/json",
-                'Content-Type': 'application/json'
+                Authorization: "Client-ID 6b56cc4baa832b7",
+                Accept: "application/json",
             },
-            body: JSON.stringify(data)
+            body: formData,
         })
-        .then((res) => console.log(res))
-        .catch(err => console.log(err))
-        setSubmitting(false)
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                console.log(response.data.link);
+                data.img = {
+                    link: response.data.link,
+                    deleteHash: response.data.deletehash,
+                    id: response.data.id
+                }
+                if(data.img){
+                    fetch("https://apideploy-final.herokuapp.com/users/register", {
+                        method: "POST",
+                        headers: {
+                            "Accept" : "application/json",
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then((res) => console.log(res))
+                    .catch(err => console.log(err))
+                    setSubmitting(false)
+                }
+            });
     }}
     >
-{  (yupData) =>      
-            <Form id="formulario-registrarse">
+{  ({setFieldValue}) =>      
+            <Form id="formulario-registrarse" encType="multipart/form-data">
                     <div id="contenedor-nombre-apellido" className="contenedor-input">
                         <Field
                             name="nombre"
@@ -151,9 +175,12 @@ const RegisterForm = () =>{
                         >
                         </Field>
                 </div>
+                <input className="form-group" type="file" name="file" onChange={(event) => {
+                    setFieldValue('file', event.target.files[0])
+                }}></input>
                 <Button type="submit" variant="contained">Registrarse</Button>
             </Form>
-}
+}           
     </Formik>
     )
 }

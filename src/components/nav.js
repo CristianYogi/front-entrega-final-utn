@@ -82,8 +82,13 @@ const ResponsiveAppBar = ({userSesion}) => {
 
   const handleCloseUserMenu = (event) => {
     setAnchorElUser(null);
-    
   };
+  const handleLogout = (event) => {
+    setAnchorElUser(null);
+    if(localStorage.getItem('sesionData')){
+      localStorage.removeItem('sesionData')
+    }
+  }
 
   const UserNavInfo = () => {
       return(
@@ -231,7 +236,9 @@ const ResponsiveAppBar = ({userSesion}) => {
             onClose={handleCloseUserMenu}
           >
             {settings.map((setting) => (
-                <Link style={{textDecoration: 'none', color:'black'}} key={setting} to={'/' + setting} color= 'inherit' underline='none'><MenuItem  onClick={handleCloseUserMenu}><Typography textAlign="center">{setting}</Typography></MenuItem></Link>
+                
+              setting !== 'Logout' ? <Link style={{textDecoration: 'none', color:'black'}} key={setting} to={'/' + setting} color= 'inherit' underline='none'><MenuItem  onClick={handleCloseUserMenu}><Typography textAlign="center">{setting}</Typography></MenuItem></Link> : <Link style={{textDecoration: 'none', color:'black'}} key={setting} to={'/'} color= 'inherit' underline='none'><MenuItem  onClick={handleLogout}><Typography textAlign="center">{setting}</Typography></MenuItem></Link>
+                    
             ))}
         </Menu>
           

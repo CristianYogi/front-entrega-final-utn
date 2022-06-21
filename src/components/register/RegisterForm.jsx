@@ -77,6 +77,7 @@ const RegisterForm = () =>{
                     deleteHash: response.data.deletehash,
                     id: response.data.id
                 }
+                console.log(data.img)
                 if(data.img){
                     fetch("https://apideploy-final.herokuapp.com/users/register", {
                         method: "POST",

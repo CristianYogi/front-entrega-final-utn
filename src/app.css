@@ -1,3 +1,10 @@
 .contenedor-principal{
     margin-top: 100px;
 }
+
+#newProduct-link{
+    position: fixed;
+
+    right: 2%;
+    bottom: 2%;
+}

@@ -4,6 +4,8 @@ import TextField from '@mui/material/TextField';
 import * as yup from "yup"
 import Button from '@mui/material/Button';
 import SuccesfulAlert from "../alerts/SuccesfulAlert";
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -11,57 +13,50 @@ const MyInput = ({ field, form, ...props }) => {
 
   };
 
-const RegisterForm = () =>{
+  const MySelectInput = ({ field, form, ...props }) => {
+    const categorias = ["Electrodomesticos","Limpieza", "Juegos", "Perisfericos", "Ropa", "Muebles"]
+    return <TextField {...field} {...props}  helperText={form.touched[field.name] && form.errors[field.name]} error={form.touched[field.name] && form.errors[field.name] && true}>
+
+        {categorias.map((option) => (
+                    <MenuItem key={option} value={option}>
+                    {option}
+                    </MenuItem>
+                ))}
+
+    </TextField> 
+
+  };
+
+const ProductsForm = () =>{
     const [registerOk, setRegisterOk] = React.useState({status: null, message: ""})
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     return(
     <Formik 
-    initialValues={{nombre:"", apellido:"", userName: "", email: "", password: "", password2: "", phoneNumber: ""}} 
+    initialValues={{title:"", body:"", categoria: "", precio: ""}} 
     validationSchema= {yup.object({
-    nombre: yup.string()
+        title: yup.string()
         .required("Required")
-        .max(20, 'Max 20 Char'),
-    apellido: yup.string()
+        .max(40, 'Max 40 Char'),
+        body: yup.string()
+        .required("Required"),
+        categoria: yup.string()
+        .required("Required"),
+        precio: yup.number()
         .required("Required")
-        .max(20, 'Max 20 Char'),
-    userName: yup.string()
-        .min(2, 'Min 2 Char')
-        .max(15, 'Max 20 Char')
-        .required("Required"),
-    email: yup.string()
-        .email("Must be an Email")
-        .required("Required"),
-    password: yup.string()
-        .min(8, 'Min 8 Char')
-        .max(20, 'Max 20 Char')
-        .required("Required"),
-    password2: yup.string()
-        .min(8, 'Min 8 Char')
-        .max(20, 'Max 20 Char')
-        .required("Required")
-        .test("verfySamePass", "Ambas Contraseñas deben ser iguales",(value, ctx) => {
-            
-            if(value !== ctx.parent.password){
-                return false
-            }
-            return true
-        }),
-    phoneNumber: yup.string()
-        .matches(phoneRegExp, 'Numero No valido')
-
+        .min(30, 'Precio Minimo 30$')
+        .positive("Debe de ser mayor que 0")
+        .integer("Debe de ser un numero.")
     })} 
     onSubmit = {(values, {setSubmitting}) => {
         const formData = new FormData()
         formData.append('image', values.file);
         
         const data = {
-            nombre : values.nombre,
-            apellido : values.apellido,
-            email : values.email,
-            userName: values.userName,
-            password: values.password
+            title : values.title,
+            body : values.body,
+            categoria : values.categoria,
+            precio: values.precio,
         }
-
         fetch("https://api.imgur.com/3/image", {
             method: "POST",
             headers: {
@@ -81,7 +76,7 @@ const RegisterForm = () =>{
                 }
                 console.log(data.img)
                 if(data.img){
-                    fetch("https://apideploy-final.herokuapp.com/users/register", {
+                    fetch("https://apideploy-final.herokuapp.com/productos", {
                         method: "POST",
                         credentials: "include",
                         headers: {
@@ -103,87 +98,64 @@ const RegisterForm = () =>{
     >
 {  ({setFieldValue}) =>      
             <Form id="formulario-registrarse" encType="multipart/form-data">
-                    <div id="contenedor-nombre-apellido" className="contenedor-input">
-                        <Field
-                            name="nombre"
+                    <Field
+                        name="title"
+                        component={MyInput}
+                        tpye="text"
+                        label="Titulo" 
+                        variant="outlined"
+                    >
+                    </Field>
+
+                    <Field
+                            name="body"
                             component={MyInput}
                             type="text"
-                            label="Nombre" 
+                            id="descripcion"
+                            multiline
+                            label="Descripcion" 
+                            maxRows={10}
                             variant="outlined"
                         >
                         </Field>
-                        <Field
-                            name="apellido"
-                            component={MyInput}
-                            type="text"
-                            label="Apellido" 
-                            variant="outlined"
-                        >
-                        </Field>
-                    </div>
                     <div id="contenedor-username-mail" className="contenedor-input">
                         <Field
-                            name="userName"
-                            component={MyInput}
+                            name="categoria"
+                            select
+                            component={MySelectInput}
+                            onChange={(event) => {
+                                setFieldValue('categoria', event.target.value)
+                            }}
+
                             type="text"
                             id="outlined-basic"
-                            label="Username" 
+                            label="Categoria" 
                             variant="outlined"
                         >
                         </Field>
-
-
                         <Field
-                            name="email"
+                            name="precio"
                             component={MyInput}
-                            type="email"
-                            id="email-input"
-                            label="Email" 
+                            type="number"
+                            
+                            // startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            InputProps={{
+                                startAdornment:
+                                <InputAdornment position="start">$</InputAdornment>,
+                                }}
+
+                            id="precio"
+                            label="Precio" 
                             variant="outlined"
                         >
                         </Field>
                     </div>
-                    {/* <TextField name="username" tpye="text" id="outlined-basic"  helperText={yupData.errors.username} label="Outlined" variant="outlined"></TextField> */}
 
-
-                <div id="contenedor-password" className="contenedor-input">
-                    <Field
-                        name="password"
-                        component={MyInput}
-                        type="password"
-                        variant="outlined"
-                        id="pass1"
-                        label="Password"
-                        autoComplete="current-password"
-                    >
-                    </Field>
-                    <Field
-                        name="password2"
-                        component={MyInput}
-                        type="password"
-                        variant="outlined"
-                        id="pass2"
-                        label="Repeat Password"
-                        autoComplete="repeat-password"
-                    >
-                    </Field>
-                </div>
-                <div id="contenedor-fecha-numbero" className="contenedor-input">
-                    <Field
-                            name="phoneNumber"
-                            component={MyInput}
-                            type="text"
-                            variant="outlined"
-                            id="phoneNumber"
-                            label="Telefono"
-                            autoComplete="numero-telefono"
-                        >
-                        </Field>
-                </div>
                 <input className="form-group" type="file" name="file" onChange={(event) => {
                     setFieldValue('file', event.target.files[0])
                 }}></input>
                 <Button type="submit" variant="contained">Registrarse</Button>
+                
                 {registerOk.status !== null  ? <SuccesfulAlert message={registerOk.message} status={registerOk.status}></SuccesfulAlert> : null}
 
             </Form>
@@ -192,4 +164,4 @@ const RegisterForm = () =>{
     )
 }
 
-export default RegisterForm
+export default ProductsForm

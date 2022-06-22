@@ -4,6 +4,7 @@ import "./app.css"
 import React, { useEffect, useState } from 'react';
 import './css/nav.css'
 import sesionContext from './context/sesionContex';
+import AddNewProduct from './components/AddNewProduct';
 
 function App() {
   const [userSesion, setUserSesion] = React.useState({userName: '', img: ''})
@@ -25,6 +26,7 @@ function App() {
     }}>
       <ResponsiveAppBar userSesion={userSesion}></ResponsiveAppBar>
       <Outlet></Outlet>
+      <AddNewProduct></AddNewProduct>
     </sesionContext.Provider>
     </>
   );

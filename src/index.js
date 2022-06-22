@@ -8,6 +8,9 @@ import Perfil from './routes/Perfil';
 import Inicio from './routes/Inicio';
 import Register from './routes/Register';
 import Login from './routes/Login';
+import NewProduct from './routes/NewProduct';
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -19,6 +22,7 @@ root.render(
             <Route path="Perfil" element={<Perfil></Perfil>}></Route>
             <Route path="registrarse" element={<Register></Register>}></Route>
             <Route path="login" element={<Login></Login>}></Route>
+            <Route path="new-product" element={<NewProduct></NewProduct>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -7,6 +7,23 @@ import SuccesfulAlert from "../alerts/SuccesfulAlert";
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 const MyInput = ({ field, form, ...props }) => {
     
     return <TextField {...field} {...props}  helperText={form.touched[field.name] && form.errors[field.name]} error={form.touched[field.name] && form.errors[field.name] && true}></TextField> 
@@ -50,7 +67,6 @@ const ProductsForm = () =>{
     onSubmit = {(values, {setSubmitting}) => {
         const formData = new FormData()
         formData.append('image', values.file);
-        
         const data = {
             title : values.title,
             body : values.body,
@@ -74,13 +90,13 @@ const ProductsForm = () =>{
                     deleteHash: response.data.deletehash,
                     id: response.data.id
                 }
-                console.log(data.img)
                 if(data.img){
                     fetch("https://apideploy-final.herokuapp.com/productos", {
                         method: "POST",
                         credentials: "include",
                         headers: {
                             "Accept" : "application/json",
+                            "Authorization" : getCookie('access_token'),
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(data)
@@ -154,7 +170,7 @@ const ProductsForm = () =>{
                 <input className="form-group" type="file" name="file" onChange={(event) => {
                     setFieldValue('file', event.target.files[0])
                 }}></input>
-                <Button type="submit" variant="contained">Registrarse</Button>
+                <Button type="submit" variant="contained">Cargar Producto</Button>
                 
                 {registerOk.status !== null  ? <SuccesfulAlert message={registerOk.message} status={registerOk.status}></SuccesfulAlert> : null}
 

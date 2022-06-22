@@ -14,7 +14,11 @@ const Productos = () => {
         fetch("https://apideploy-final.herokuapp.com/productos")
         .then((res) => res.json())
         .then((json) => {
-            setProductos(json)
+            console.log(json)
+            if(!json.status){
+                setProductos(json)
+            }
+            
         })
         .catch(err => console.log(err))
     }, [])

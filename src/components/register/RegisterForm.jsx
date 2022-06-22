@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import TextField from '@mui/material/TextField';
 import * as yup from "yup"
 import Button from '@mui/material/Button';
+import SuccesfulAlert from "../alerts/SuccesfulAlert";
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -11,6 +12,7 @@ const MyInput = ({ field, form, ...props }) => {
   };
 
 const RegisterForm = () =>{
+    const [registerOk, setRegisterOk] = React.useState(null)
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     return(
     <Formik 
@@ -81,13 +83,17 @@ const RegisterForm = () =>{
                 if(data.img){
                     fetch("https://apideploy-final.herokuapp.com/users/register", {
                         method: "POST",
+                        credentials: "include",
                         headers: {
                             "Accept" : "application/json",
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(data)
                     })
-                    .then((res) => console.log(res))
+                    .then((res) => {
+                        console.log(res)
+                        setRegisterOk(res.ok)
+                    })
                     .catch(err => console.log(err))
                     setSubmitting(false)
                 }
@@ -180,6 +186,8 @@ const RegisterForm = () =>{
                     setFieldValue('file', event.target.files[0])
                 }}></input>
                 <Button type="submit" variant="contained">Registrarse</Button>
+                {/* {registerOk ? <SuccesfulAlert message="Registro Correcto." severity="success"></SuccesfulAlert> : <SuccesfulAlert message="Hubo un Error." severity="error"></SuccesfulAlert>} */}
+
             </Form>
 }           
     </Formik>

@@ -8,6 +8,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import KeyIcon from '@mui/icons-material/Key';
 import sesionContext from "../../context/sesionContex";
 import { useContext } from "react";
+import SuccesfulAlert from "../alerts/SuccesfulAlert";
 
 const MyInput = ({ field, form, ...props }) => {
     
@@ -26,7 +27,8 @@ const MyInput = ({ field, form, ...props }) => {
 
 const RegisterForm = () =>{
     const {userSesion,setUserSesion} = useContext(sesionContext)
-
+    const [serverResponse, setServerResponse] = React.useState({status: null, message: ""})
+    
     return(
     <Formik 
     initialValues={{userName: "", password: ""}} 
@@ -57,9 +59,15 @@ const RegisterForm = () =>{
         .then(res => res.json())
         .then(json => {
             console.log(json)
-            document.cookie = `access_token=${json.Token_Info.token}`
-            localStorage.setItem("sesionData", JSON.stringify(json.Token_Info.user))
-            setUserSesion({userName: json.Token_Info.user.name, img: json.Token_Info.user.img})
+            
+            if(json.Token_Info){
+                localStorage.setItem("sesionData", JSON.stringify(json.Token_Info.user))
+                document.cookie = `access_token=${json.Token_Info.token}`
+                setUserSesion({userName: json.Token_Info.user.name, img: json.Token_Info.user.img})
+            }
+  
+            setServerResponse({status: json.status, message: json.message})
+
         })
         
         setSubmitting(false)
@@ -95,6 +103,7 @@ const RegisterForm = () =>{
                     </Field>
                 </div>
                 <Button type="submit" variant="contained">Logearse</Button>
+                {serverResponse.status !== null  ? <SuccesfulAlert message={serverResponse.message} status={serverResponse.status}></SuccesfulAlert> : null}
             </Form>
 }
     </Formik>

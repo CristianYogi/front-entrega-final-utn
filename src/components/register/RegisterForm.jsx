@@ -12,7 +12,7 @@ const MyInput = ({ field, form, ...props }) => {
   };
 
 const RegisterForm = () =>{
-    const [registerOk, setRegisterOk] = React.useState(null)
+    const [registerOk, setRegisterOk] = React.useState({status: null, message: ""})
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     return(
     <Formik 
@@ -90,9 +90,10 @@ const RegisterForm = () =>{
                         },
                         body: JSON.stringify(data)
                     })
+                    .then((res) => res.json())
                     .then((res) => {
                         console.log(res)
-                        setRegisterOk(res.ok)
+                        setRegisterOk({status: res.status, message: res.message})
                     })
                     .catch(err => console.log(err))
                     setSubmitting(false)
@@ -186,7 +187,7 @@ const RegisterForm = () =>{
                     setFieldValue('file', event.target.files[0])
                 }}></input>
                 <Button type="submit" variant="contained">Registrarse</Button>
-                {/* {registerOk ? <SuccesfulAlert message="Registro Correcto." severity="success"></SuccesfulAlert> : <SuccesfulAlert message="Hubo un Error." severity="error"></SuccesfulAlert>} */}
+                {registerOk.status !== null  ? <SuccesfulAlert message={registerOk.message} status={registerOk.status}></SuccesfulAlert> : null}
 
             </Form>
 }           
